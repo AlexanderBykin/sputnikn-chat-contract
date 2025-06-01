@@ -4,6 +4,9 @@ package ru.alexshniperson.sputnikn.api.contract.v1;
 
 option go_package = "contract/v1";
 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
 service ChatService {
 	rpc AuthUser(AuthUserRequest) returns (AuthUserResponse);
 	
@@ -17,18 +20,14 @@ service ChatService {
 
 	rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
 
-	rpc InviteRoomMember(EmptyRequest) returns (RoomStateChangedResponse);
+	rpc InviteRoomMember(google.protobuf.Empty) returns (RoomStateChangedResponse);
 
-	rpc RemoveRoomMember(EmptyRequest) returns (RoomStateChangedResponse);
+	rpc RemoveRoomMember(google.protobuf.Empty) returns (RoomStateChangedResponse);
 
     rpc AddRoomMessage(RoomEventMessageRequest) returns (RoomEventMessageResponse);
-}
 
-service ChatStreamService {
-	rpc RoomEventStream(EmptyRequest) returns (stream RoomEventResponse);
+    rpc SubscribeRoomEvents(google.protobuf.Empty) returns (stream RoomEventResponse);
 }
-
-message EmptyRequest {}
 
 // >>> auth
 
@@ -76,7 +75,7 @@ message RoomMemberDetail {
     bool isOnline = 3;
     RoomMemberStatusType memberStatus = 4;
     optional string avatar = 5;
-    int64 lastReadMarker = 6;
+    google.protobuf.Timestamp lastReadMarker = 6;
 }
 
 // The RoomState, it will be sent to client every time Room is changed (title, avatar, members, member read markers)
@@ -109,7 +108,7 @@ enum SinceTimeOrderType {
 }
 
 message SinceTimeFilter {
-    int64 sinceTimestamp = 1;
+    google.protobuf.Timestamp sinceTimestamp = 1;
     SinceTimeOrderType orderType = 2;
 }
 
@@ -138,7 +137,7 @@ message RoomEventReactionDetail {
     string roomId = 2;
     string senderId = 3;
     string content = 4;
-    int64 timestamp = 5;
+    google.protobuf.Timestamp createTimestamp = 5;
 }
 
 message RoomEventMessageDetail {
@@ -150,8 +149,8 @@ message RoomEventMessageDetail {
     repeated ChatAttachmentDetail attachment = 6;
     repeated RoomEventReactionDetail reaction = 7;
     string content = 8;
-    int64 createTimestamp = 9;
-    int64 updateTimestamp = 10;
+    google.protobuf.Timestamp createTimestamp = 9;
+    google.protobuf.Timestamp updateTimestamp = 10;
 }
 
 message RoomEventSystemDetail {
@@ -159,7 +158,7 @@ message RoomEventSystemDetail {
     string roomId = 2;
     int32 version = 3;
     string content = 4;
-    int64 createTimestamp = 5;
+    google.protobuf.Timestamp createTimestamp = 5;
 }
 
 message SyncRoomsResponse {
@@ -198,7 +197,7 @@ message ListUsersResponse {
 // Will produce RoomStateChangedReply
 message RoomReadMarkerRequest {
     string roomId = 1;
-    int64 readMarkerTimestamp = 2;
+    google.protobuf.Timestamp readMarkerTimestamp = 2;
 }
 
 message CreateRoomRequest {
@@ -234,25 +233,5 @@ message RoomEventResponse {
         RoomStateChangedResponse roomStateChanged = 3;
         RoomEventMessageDetail roomEventMessage = 4;
         RoomEventReactionDetail roomEventReaction = 5;
-
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
