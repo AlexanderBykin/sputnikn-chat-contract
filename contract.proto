@@ -20,11 +20,13 @@ service ChatService {
 
 	rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
 
-	rpc InviteRoomMember(google.protobuf.Empty) returns (RoomStateChangedResponse);
+	rpc InviteRoomMember(InviteRoomMemberRequest) returns (RoomStateChangedResponse);
 
-	rpc RemoveRoomMember(google.protobuf.Empty) returns (RoomStateChangedResponse);
+	rpc RemoveRoomMember(RemoveRoomMemberRequest) returns (RoomStateChangedResponse);
 
     rpc AddRoomMessage(RoomEventMessageRequest) returns (RoomEventMessageResponse);
+
+    rpc AddRoomMessageReaction(RoomEventMessageReactionRequest) returns (RoomEventMessageReactionResponse);
 
     rpc SubscribeRoomEvents(google.protobuf.Empty) returns (stream RoomEventResponse);
 }
@@ -180,11 +182,16 @@ message RoomEventMessageResponse {
     RoomEventMessageDetail detail = 1;
 }
 
-message RoomEventReaction {
+message RoomEventMessageReactionRequest {
     string roomId = 1;
     string messageId = 2;
     int32 clientEventId = 3;
     string content = 4;
+    int32 version = 5;
+}
+
+message RoomEventMessageReactionResponse {
+    RoomEventReactionDetail detail = 1;
 }
 
 message ListUsersRequest {
@@ -211,13 +218,13 @@ message CreateRoomResponse {
 }
 
 // Will produce RoomStateChangedResponse
-message InviteRoomMember {
+message InviteRoomMemberRequest {
     string roomId = 1;
     repeated string memberIds = 2;
 }
 
 // Will produce RoomStateChangedResponse
-message RemoveRoomMember {
+message RemoveRoomMemberRequest {
     string roomId = 1;
     repeated string memberIds = 2;
 }
