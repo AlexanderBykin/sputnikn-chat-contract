@@ -171,10 +171,9 @@ message SyncRoomsResponse {
 
 message RoomEventMessageRequest {
     string roomId = 1;
-    int32 clientEventId = 2;
-    repeated string attachment = 3;
-    string content = 4;
-    int32 version = 5;
+    repeated string attachment = 2;
+    string content = 3;
+    int32 version = 4;
 }
 
 message RoomEventMessageResponse {
