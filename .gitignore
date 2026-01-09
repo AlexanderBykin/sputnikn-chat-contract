@@ -1,1 +1,2 @@
-contract
+go_build
+dart_build

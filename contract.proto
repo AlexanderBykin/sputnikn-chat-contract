@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package ru.alexshniperson.sputnikn.api.contract.v1;
+package ru.sputnikn.api.contract.v1;
 
 option go_package = "contract/v1";
 
@@ -110,7 +110,7 @@ enum SinceTimeOrderType {
 }
 
 message SinceTimeFilter {
-    google.protobuf.Timestamp sinceTimestamp = 1;
+    google.protobuf.Timestamp since = 1;
     SinceTimeOrderType orderType = 2;
 }
 
@@ -139,20 +139,19 @@ message RoomEventReactionDetail {
     string roomId = 2;
     string senderId = 3;
     string content = 4;
-    google.protobuf.Timestamp createTimestamp = 5;
+    google.protobuf.Timestamp createdAt = 5;
 }
 
 message RoomEventMessageDetail {
     string eventId = 1;
     string roomId = 2;
     string senderId = 3;
-    optional int32 clientEventId = 4;
-    int32 version = 5;
-    repeated ChatAttachmentDetail attachment = 6;
-    repeated RoomEventReactionDetail reaction = 7;
-    string content = 8;
-    google.protobuf.Timestamp createTimestamp = 9;
-    google.protobuf.Timestamp updateTimestamp = 10;
+    int32 version = 4;
+    repeated ChatAttachmentDetail attachment = 5;
+    repeated RoomEventReactionDetail reaction = 6;
+    string content = 7;
+    google.protobuf.Timestamp createdAt = 8;
+    google.protobuf.Timestamp updatedAt = 9;
 }
 
 message RoomEventSystemDetail {
@@ -160,7 +159,7 @@ message RoomEventSystemDetail {
     string roomId = 2;
     int32 version = 3;
     string content = 4;
-    google.protobuf.Timestamp createTimestamp = 5;
+    google.protobuf.Timestamp createdAt = 5;
 }
 
 message SyncRoomsResponse {
@@ -204,7 +203,7 @@ message ListUsersResponse {
 // Will produce RoomStateChangedReply
 message RoomReadMarkerRequest {
     string roomId = 1;
-    google.protobuf.Timestamp readMarkerTimestamp = 2;
+    google.protobuf.Timestamp readMarker = 2;
 }
 
 message CreateRoomRequest {
@@ -237,8 +236,7 @@ message RoomEventResponse {
     oneof payload {
         RoomEventMessageDetail messageEvent = 1;
         RoomEventSystemDetail systemEvent = 2;
-        RoomStateChangedResponse roomStateChanged = 3;
-        RoomEventMessageDetail roomEventMessage = 4;
-        RoomEventReactionDetail roomEventReaction = 5;
+        RoomDetail roomStateChanged = 3;
+        RoomEventReactionDetail messageEventReaction = 5;
     }
 }
